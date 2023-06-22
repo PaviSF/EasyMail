@@ -4,13 +4,12 @@ import AudioBottomSheet from "../components/Audio/AudioBottomSheet";
 const ModalView = ({ modalVisible, closeModal }) => {
   return (
     <Modal
-      style={styles.extra}
       animationType="slide"
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => closeModal()}
     >
-      <View style={styles.extra}>
+      <View style={styles.bgLayout}>
         <View style={styles.bgContainer} />
         <View style={styles.modalContainer}>
           <AudioBottomSheet />
@@ -21,7 +20,7 @@ const ModalView = ({ modalVisible, closeModal }) => {
 };
 
 const styles = StyleSheet.create({
-  extra: {
+  bgLayout: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     marginBottom: 30,
@@ -32,11 +31,10 @@ const styles = StyleSheet.create({
     // Translucent background color
   },
   modalContainer: {
+    flex: 0.4,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
     backgroundColor: "white",
-    
-    flex: 0.4,
   },
 });
 

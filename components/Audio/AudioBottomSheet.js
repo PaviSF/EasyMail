@@ -12,6 +12,7 @@ export default function AudioBottomSheet() {
   const [pauseRecord, setPauseRecord] = useState(false);
 
   const buttonSize = 80;
+  const buttonColor = "#4284f5"
 
   const startRecording = async () => {
     try {
@@ -104,7 +105,7 @@ export default function AudioBottomSheet() {
           style={styles.button}
           onPress={() => startRecording()}
         >
-          <Foundation name="record" size={buttonSize + 17} color="black" />
+          <Foundation name="record" size={buttonSize + 17} color={buttonColor} />
         </TouchableOpacity>
       </ModalViewAlignment>
     );
@@ -112,7 +113,7 @@ export default function AudioBottomSheet() {
     return (
       <ModalViewAlignment>
         <TouchableOpacity style={styles.button} onPress={() => stopRecording()}>
-          <Feather name="stop-circle" size={buttonSize + 8} color="black" />
+          <Feather name="stop-circle" size={buttonSize + 8} color={buttonColor} />
         </TouchableOpacity>
       </ModalViewAlignment>
     );
@@ -126,25 +127,25 @@ export default function AudioBottomSheet() {
               discard();
             }}
           >
-            <AntDesign name="delete" size={buttonSize - 35} color="black" />
+            <AntDesign name="delete" size={buttonSize - 35} color={buttonColor}  />
           </TouchableOpacity>
           {pauseRecord ? (
             <TouchableOpacity
               style={styles.button}
               onPress={() => pauseRecordedVoice()}
             >
-              <AntDesign name="pausecircle" size={buttonSize} color="black" />
+              <AntDesign name="pausecircle" size={buttonSize} color={buttonColor}  />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               style={styles.button}
               onPress={() => loadAndPlayRecordedVoice()}
             >
-              <AntDesign name="play" size={buttonSize} color="black" />
+              <AntDesign name="play" size={buttonSize} color={buttonColor}  />
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.button} onPress={() => sendRecord()}>
-            <Feather name="send" size={buttonSize - 35} color="black" />
+            <Feather name="send" size={buttonSize - 35} color={buttonColor}  />
           </TouchableOpacity>
         </View>
       </ModalViewAlignment>
@@ -153,10 +154,6 @@ export default function AudioBottomSheet() {
 }
 
 const styles = StyleSheet.create({
-  top: {
-    flex: 1,
-    backgroundColor: "blue",
-  },
   bottom: {
     flex: 0.4,
     flexDirection: "row",
