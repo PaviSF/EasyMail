@@ -1,9 +1,11 @@
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { useState } from "react";
 import GridBox from "./GridBox";
 import SendDoc from "../SendDocs/SendDoc";
 import { StatusBar } from "expo-status-bar";
+import ModalView from "../../constants/ModalView";
 
 const sendTextImage = require("../../assets/chat.png");
 const sendAudioImage = require("../../assets/microphone.png");
@@ -11,6 +13,17 @@ const sendDocumentImage = require("../../assets/folder.png");
 const sendPhotoImage = require("../../assets/diaphragm.png");
 
 const GridPage = ({ navigation }) => {
+
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openModal = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <View style={styles.row}>
@@ -30,10 +43,11 @@ const GridPage = ({ navigation }) => {
         </TouchableOpacity>
         <View style={styles.plusColumn} />
 
-        <TouchableOpacity style={styles.row}onPress={() => navigation.navigate("AudioBottomSheet")}>
+        <TouchableOpacity style={styles.row} onPress={openModal}>
           <GridBox image={sendAudioImage} label={"Audio"}></GridBox>
         </TouchableOpacity>
       </View>
+      <ModalView modalVisible={modalVisible} closeModal={closeModal} />
       <StatusBar style="inverted"></StatusBar>
     </GestureHandlerRootView>
   );
