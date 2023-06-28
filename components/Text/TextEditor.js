@@ -29,13 +29,24 @@ const TextEditor = ({ onTextChange }) => {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={{ flex: 1 }}
         >
-          <RichEditor ref={richText} onChange={(des) => handleChange(des)} />
+          
+          <RichEditor
+            ref={richText}
+            onChange={(des) => handleChange(des)}
+            placeholder="Write your content here..."
+            androidHardwareAccelerationDisabled={true}
+            // style={styles.richTextEditorStyle}
+            initialHeight={200}
+            onContentSizeChange={false}
+            style={{height:200 }}
+          />
         </KeyboardAvoidingView>
       </ScrollView>
       <FineLine />
 
       <RichToolbar
-        selectedIconTint={{ color: "blue" }}
+        selectedIconTint ="blue"
+        iconTint="#312921"
         editor={richText}
         actions={[actions.setBold, actions.setItalic, actions.setUnderline]}
         iconMap={{ [actions.heading1]: handleHead }}

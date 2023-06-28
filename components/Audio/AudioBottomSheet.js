@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Audio } from "expo-av";
 import * as MailComposer from "expo-mail-composer";
-import { AntDesign, Feather, Foundation } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Feather,
+  Foundation,
+  FontAwesome,
+} from "@expo/vector-icons";
 import ModalViewAlignment from "../../constants/ModalViewAlignment";
 
 export default function AudioBottomSheet() {
@@ -12,7 +17,7 @@ export default function AudioBottomSheet() {
   const [pauseRecord, setPauseRecord] = useState(false);
 
   const buttonSize = 80;
-  const buttonColor = "#4284f5"
+  const buttonColor = "#4284f5";
 
   const startRecording = async () => {
     try {
@@ -50,7 +55,6 @@ export default function AudioBottomSheet() {
     if (recording) {
       setRecording(undefined);
       setSound(undefined);
-      console.log(recording);
       setRecordState("NOT_STARTED");
       console.log("Recording discarded");
     }
@@ -100,20 +104,28 @@ export default function AudioBottomSheet() {
 
   if (recordState === "NOT_STARTED") {
     return (
-      <ModalViewAlignment>
+      <ModalViewAlignment recordState={recordState}>
         <TouchableOpacity
           style={styles.button}
           onPress={() => startRecording()}
         >
-          <Foundation name="record" size={buttonSize + 17} color={buttonColor} />
+          <Foundation
+            name="record"
+            size={buttonSize + 17}
+            color={buttonColor}
+          />
         </TouchableOpacity>
       </ModalViewAlignment>
     );
   } else if (recordState === "STARTED") {
     return (
-      <ModalViewAlignment>
+      <ModalViewAlignment recordState={recordState}>
         <TouchableOpacity style={styles.button} onPress={() => stopRecording()}>
-          <Feather name="stop-circle" size={buttonSize + 8} color={buttonColor} />
+          <FontAwesome
+            name="stop-circle"
+            size={buttonSize + 8}
+            color={buttonColor}
+          />
         </TouchableOpacity>
       </ModalViewAlignment>
     );
@@ -127,25 +139,33 @@ export default function AudioBottomSheet() {
               discard();
             }}
           >
-            <AntDesign name="delete" size={buttonSize - 35} color={buttonColor}  />
+            <AntDesign
+              name="delete"
+              size={buttonSize - 35}
+              color={buttonColor}
+            />
           </TouchableOpacity>
           {pauseRecord ? (
             <TouchableOpacity
               style={styles.button}
               onPress={() => pauseRecordedVoice()}
             >
-              <AntDesign name="pausecircle" size={buttonSize} color={buttonColor}  />
+              <AntDesign
+                name="pausecircle"
+                size={buttonSize}
+                color={buttonColor}
+              />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-              style={styles.button}
+              style={[styles.button, styles.centerButton]}
               onPress={() => loadAndPlayRecordedVoice()}
             >
-              <AntDesign name="play" size={buttonSize} color={buttonColor}  />
+              <AntDesign name="play" size={buttonSize} color={buttonColor} />
             </TouchableOpacity>
           )}
           <TouchableOpacity style={styles.button} onPress={() => sendRecord()}>
-            <Feather name="send" size={buttonSize - 35} color={buttonColor}  />
+            <Feather name="send" size={buttonSize - 35} color={buttonColor} />
           </TouchableOpacity>
         </View>
       </ModalViewAlignment>
@@ -163,4 +183,5 @@ const styles = StyleSheet.create({
   button: {
     marginHorizontal: 30,
   },
+  centerButton: {},
 });

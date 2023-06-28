@@ -1,40 +1,56 @@
-import { Modal, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import AudioBottomSheet from "../components/Audio/AudioBottomSheet";
+import TextPage from "../components/Text/TextPage";
+import Profile from "../components/Profile/Profile";
+import AudioTimer from "../components/Audio/AudioTimer";
+import Modal from "react-native-modal";
 
-const ModalView = ({ modalVisible, closeModal }) => {
+const ModalView = ({ modalVisible, closeModal, whichFeature }) => {
   return (
     <Modal
+      style={{ flex: 1, margin: 0 }}
+      coverScreen={true}
       animationType="slide"
+      hasBackdrop={true}
+      backdropColor="black"
+      backdropOpacity={0.6}
       transparent={true}
       visible={modalVisible}
       onRequestClose={() => closeModal()}
     >
-      <View style={styles.bgLayout}>
-        <View style={styles.bgContainer} />
-        <View style={styles.modalContainer}>
-          <AudioBottomSheet />
-        </View>
+      <View style={styles.modalContainer}>
+        {whichFeature === "TEXT_PAGE" ? <TextPage /> : <AudioBottomSheet />}
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  bgLayout: {
+  modalStyle: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    marginBottom: 30,
+    margin: 0,
   },
   bgContainer: {
     flex: 0.7,
-    //backgroundColor: "rgba(0, 0, 0, 0.5)",
-    // Translucent background color
   },
   modalContainer: {
     flex: 0.4,
     borderTopRightRadius: 25,
     borderTopLeftRadius: 25,
-    backgroundColor: "white",
+    backgroundColor: "#FFFFFF",
+    paddingBottom: 25,
+    position: "absolute",
+    bottom: 0,
+    height: 350,
+    width: "100%",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 8,
   },
 });
 

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as MailComposer from "expo-mail-composer";
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useSelector } from "react-redux";
 import TextEditor from "./TextEditor";
 
 const sendIcon = require("../../assets/send.png");
@@ -8,6 +9,7 @@ const sendIcon = require("../../assets/send.png");
 export default function TextPage() {
   const [emailText, setEmailText] = useState("");
   const [isAvailable, setIsAvailable] = useState(false);
+  const user = useSelector((state) => state.user.value);
 
   useEffect(() => {
     async function checkAvailability() {
@@ -18,13 +20,14 @@ export default function TextPage() {
   }, []);
 
   const sendMail = (body) => {
-    
-    if (body){
-    MailComposer.composeAsync({
-      body,
-      recipients: ["pavithraos123@gmail.com"],
-      isHtml: true,
-    });}
+    if (body) {
+      MailComposer.composeAsync({
+        body,
+        recipients: [user.isPrimary ? user.primaryEmail : user.secondaryEmail],
+        isHtml: true,
+      });
+    }
+    console.log(user.isPrimary);
   };
 
   return (
@@ -33,7 +36,9 @@ export default function TextPage() {
 
       <TouchableOpacity
         style={styles.buttonContainer}
-        onPress={() => {sendMail(emailText)}}
+        onPress={() => {
+          sendMail(emailText);
+        }}
       >
         <Image source={sendIcon} style={styles.buttonIcon} />
       </TouchableOpacity>

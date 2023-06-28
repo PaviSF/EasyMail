@@ -5,12 +5,15 @@ import {
   SafeAreaView,
   Image,
   Pressable,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as MailComposer from "expo-mail-composer";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 const sendMail = (uri) => {
   MailComposer.composeAsync({
@@ -74,41 +77,45 @@ export default function SendPicture() {
           style={styles.preview}
           source={{ uri: "data:image/jpg;base64," + photo.base64 }}
         />
-        <View style={{ flex: 0.15, flexDirection: "row", justifyContent:"space-around" }}>
+        <View
+          style={{
+            flex: 0.15,
+            flexDirection: "row",
+            justifyContent: "space-around",
+            backgroundColor: "black",
+            paddingTop:30,
+            paddingLeft:50,
+            
+          }}
+        >
           {hasMediaLibraryPermission ? (
-            <Pressable style={{flex:1}} onPress={savePhoto}>
-              <Image
-                style={styles.buttonSize}
-                source={require("../../assets/diskette.png")}
-              />
-            </Pressable>
+            <View style={{ flex: 1 }}>
+              <TouchableOpacity onPress={savePhoto}>
+                <Ionicons name="save" size={50} color="white" />
+              </TouchableOpacity>
+            </View>
           ) : undefined}
-          <Pressable style={{flex:1}} onPress={sharePic}>
-          <Image
-              style={styles.buttonSize}
-              source={require("../../assets/send.png")}
-            />
-          </Pressable>
-          <Pressable style={{flex:1}} onPress={() => setPhoto(undefined)}>
-            <Image
-              style={styles.buttonSize}
-              source={require("../../assets/x-mark.png")}
-            />
-          </Pressable>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity onPress={sharePic}>
+              <FontAwesome name="send" size={50} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={{ flex: 1 }}>
+            <TouchableOpacity onPress={() => setPhoto(undefined)}>
+              <AntDesign name="delete" size={50} color="white" />
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     );
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "black" }}>
       <Camera style={styles.container} ref={cameraRef}></Camera>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={takePic}>
-          <Image
-            style={styles.buttonSize}
-            source={require("../../assets/oval.png")}
-          />
+          <Ionicons name="radio-button-on" size={80} color="white" />
         </TouchableOpacity>
       </View>
     </View>
@@ -125,14 +132,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginVertical: 30,
     alignSelf: "center",
-    color:'black'
+    color: "black",
   },
   preview: {
     alignSelf: "stretch",
     flex: 1,
   },
-  buttonSize: {
-    height: 60,
-    width: 60,
-  },
+  buttonSize: {},
 });
