@@ -19,7 +19,7 @@ const ModalView = ({ modalVisible, closeModal, whichFeature }) => {
       onRequestClose={() => closeModal()}
     >
       <View style={styles.modalContainer}>
-        {whichFeature === "TEXT_PAGE" ? <TextPage /> : <AudioBottomSheet />}
+        {whichFeature === "TEXT_PAGE" ? <TextPage/> : whichFeature ==="AUDIO_PAGE" ? <AudioBottomSheet /> : <Profile/>}
       </View>
     </Modal>
   );

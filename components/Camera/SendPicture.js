@@ -4,10 +4,10 @@ import {
   View,
   SafeAreaView,
   Image,
-  Pressable,
   TouchableOpacity,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { Camera } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as MailComposer from "expo-mail-composer";
@@ -15,18 +15,19 @@ import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 
-const sendMail = (uri) => {
-  MailComposer.composeAsync({
-    recipients: ["pavithraos123@gmail.com"],
-    attachments: [uri],
-  });
-};
-
 export default function SendPicture() {
   let cameraRef = useRef();
+  const user = useSelector((state) => state.user.value);
   const [hasCameraPermission, setHasCameraPermission] = useState();
   const [hasMediaLibraryPermission, setHasMediaLibraryPermission] = useState();
   const [photo, setPhoto] = useState();
+
+  const sendMail = (uri) => {
+    MailComposer.composeAsync({
+      recipients: [user.isPrimary ? user.primaryEmail : user.secondaryEmail],
+      attachments: [uri],
+    });
+  };
 
   useEffect(() => {
     (async () => {
@@ -83,9 +84,8 @@ export default function SendPicture() {
             flexDirection: "row",
             justifyContent: "space-around",
             backgroundColor: "black",
-            paddingTop:30,
-            paddingLeft:50,
-            
+            paddingTop: 30,
+            paddingLeft: 50,
           }}
         >
           {hasMediaLibraryPermission ? (

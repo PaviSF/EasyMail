@@ -27,7 +27,7 @@ const GridPage = ({ navigation }) => {
   };
 
   return (
-    <GestureHandlerRootView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.row}
@@ -64,7 +64,7 @@ const GridPage = ({ navigation }) => {
         whichFeature={whichFeature}
       />
       <StatusBar style="inverted"></StatusBar>
-    </GestureHandlerRootView>
+    </View>
   );
 };
 

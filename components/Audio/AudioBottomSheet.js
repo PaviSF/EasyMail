@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Audio } from "expo-av";
 import * as MailComposer from "expo-mail-composer";
+import { useSelector } from "react-redux";
 import {
   AntDesign,
   Feather,
@@ -15,6 +16,8 @@ export default function AudioBottomSheet() {
   const [sound, setSound] = useState();
   const [recordState, setRecordState] = useState("NOT_STARTED");
   const [pauseRecord, setPauseRecord] = useState(false);
+
+  const user = useSelector((state) => state.user.value);
 
   const buttonSize = 80;
   const buttonColor = "#4284f5";
@@ -97,7 +100,7 @@ export default function AudioBottomSheet() {
 
   const sendRecord = () => {
     MailComposer.composeAsync({
-      recipients: ["pavithraos123@gmail.com"],
+      recipients: [user.isPrimary ? user.primaryEmail : user.secondaryEmail],
       attachments: [recording.getURI()],
     });
   };

@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { setMail } from "../../features/user";
 import { useState } from "react";
@@ -18,6 +18,7 @@ const Profile = () => {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
+
   const [email, setEmail] = useState({
     primaryEmail: user.primaryEmail,
     secondaryEmail: user.secondaryEmail,
@@ -49,61 +50,100 @@ const Profile = () => {
     setEmail(updatedEmail);
   };
 
+  const handleIsPrimary = () => {
+    const updatedEmail = { ...email, isPrimary: true };
+    setEmail(updatedEmail);
+    storeData(updatedEmail);
+    dispatch(setMail(updatedEmail));
+  };
+
+  const handleIsNotPrimary = () => {
+    const updatedEmail = { ...email, isPrimary: false };
+    setEmail(updatedEmail);
+    storeData(updatedEmail);
+    dispatch(setMail(updatedEmail));
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <CardView>
-        {edit ? (
-          <>
-            <View style={{ justifyContent: "center" }}>
-              <TextInput
-                onChangeText={handlePrimaryEmailChange}
-                style={[styles.emailText, styles.editableText]}
-                placeholder={user.primaryEmail}
-              />
-              <TextInput
-                onChangeText={handleSecondaryEmailChange}
-                style={[styles.emailText, styles.editableText]}
-                placeholder={user.secondaryEmail}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                if (
-                  isEmailValid(email.primaryEmail) &&
-                  isEmailValid(email.secondaryEmail)
-                ) {
-                  setEdit(false);
-                  storeData(email);
-                  dispatch(setMail(email));
-                }
-              }}
-              style={styles.button}
-            >
-              <Feather name="save" size={24} color="black" />
-              <Text style={styles.buttonText}>Save</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            <View style={{ justifyContent: "center" }}>
-              <Text style={[styles.emailText, styles.uneditableText]}>
-                {user.primaryEmail}
-              </Text>
-              <Text style={[styles.emailText, styles.uneditableText]}>
-                {user.secondaryEmail}
-              </Text>
-            </View>
-            <TouchableOpacity
-              onPress={() => {
-                setEdit(true);
-              }}
-              style={styles.button}
-            >
-              <Feather name="edit" size={24} color="black" />
-              <Text style={styles.buttonText}>Edit</Text>
-            </TouchableOpacity>
-          </>
-        )}
+        <View>
+          {edit ? (
+            <>
+              <View style={{ justifyContent: "center" }}>
+                <TextInput
+                  onChangeText={handlePrimaryEmailChange}
+                  style={[styles.emailText, styles.editableText]}
+                  placeholder={user.primaryEmail}
+                />
+
+                <TextInput
+                  onChangeText={handleSecondaryEmailChange}
+                  style={[styles.emailText, styles.editableText]}
+                  placeholder={user.secondaryEmail}
+                />
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  if (
+                    isEmailValid(email.primaryEmail) &&
+                    isEmailValid(email.secondaryEmail)
+                  ) {
+                    setEdit(false);
+                    storeData(email);
+                    dispatch(setMail(email));
+                  }
+                }}
+                style={styles.button}
+              >
+                <Feather name="save" size={24} color="black" />
+                <Text style={styles.buttonText}>Save</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <>
+              <View style={{ justifyContent: "center" }}>
+                <Text style={[styles.emailText, styles.uneditableText]}>
+                  {user.primaryEmail}
+                </Text>
+                <Text style={[styles.emailText, styles.uneditableText]}>
+                  {user.secondaryEmail}
+                </Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => {
+                  setEdit(true);
+                }}
+                style={styles.button}
+              >
+                <Feather name="edit" size={24} color="black" />
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            </>
+          )}
+        </View>
+        <View>
+          <TouchableOpacity
+            onPress={() => handleIsPrimary()}
+            style={[styles.radioButton, styles.topRadioButton]}
+          >
+            <MaterialCommunityIcons
+              name={email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
+              size={35}
+              color={email.isPrimary ? "black" : "black"}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => handleIsNotPrimary()}
+            style={[styles.radioButton, styles.bottomRadioButton]}
+          >
+            <MaterialCommunityIcons
+              name={!email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
+              size={35}
+              color={!email.isPrimary ? "black" : "black"}
+            />
+          </TouchableOpacity>
+        </View>
       </CardView>
     </SafeAreaView>
   );
@@ -113,7 +153,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginHorizontal: 110,
+    marginHorizontal: 95,
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
@@ -124,6 +164,15 @@ const styles = StyleSheet.create({
   },
   uneditableText: { padding: 17, marginBottom: 20 },
   editableText: { padding: 15, marginBottom: 15 },
+  radioButton: {
+    marginLeft: 10,
+  },
+  topRadioButton: {
+    marginTop: 13,
+  },
+  bottomRadioButton: {
+    marginTop: 41,
+  },
 });
 
 export default Profile;

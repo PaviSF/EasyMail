@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import GridPage from "./components/MainGrid/GridPage";
 import SendPicture from "./components/Camera/SendPicture";
 import StoreEmail from "./components/UserData/StoreEmail";
+import ModalView from "./constants/ModalView";
 import { useSelector } from "react-redux";
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import Profile from "./components/Profile/Profile";
 import { useDispatch } from "react-redux";
@@ -16,7 +17,21 @@ const Stack = createNativeStackNavigator();
 const AppName = "EASY MAIL";
 
 export default function Root() {
- const userState = useSelector((state) => state.user.value.isSet);
+  const userState = useSelector((state) => state.user.value.isSet);
+  //const user = useSelector((state) => state.user.value);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [whichFeature, setWhichFeature] = useState();
+
+  const openModal = (text) => {
+    setModalVisible(true);
+    setWhichFeature(text);
+    console.log(whichFeature);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -49,17 +64,17 @@ export default function Root() {
           <Stack.Screen
             name="GridPage"
             component={GridPage}
-            options={({ navigation }) => ({
+            options={() => ({
               title: AppName,
               headerTintColor: "white",
               headerStyle: { backgroundColor: "#4284f5", color: "white" },
               headerRight: () => (
                 <TouchableOpacity
                   onPress={() => {
-                    navigation.navigate("Profile")
+                    openModal(false);
                   }}
                 >
-                  <AntDesign name="profile" size={24} color="white" />
+                  <Ionicons name="person-circle" size={35} color="white" />
                 </TouchableOpacity>
               ),
             })}
@@ -84,6 +99,11 @@ export default function Root() {
           options={headerOptions}
         />
       </Stack.Navigator>
+      <ModalView
+        modalVisible={modalVisible}
+        closeModal={closeModal}
+        whichFeature={whichFeature}
+      />
     </NavigationContainer>
   );
 }
