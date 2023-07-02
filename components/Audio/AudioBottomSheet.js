@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Audio } from "expo-av";
 import * as MailComposer from "expo-mail-composer";
@@ -81,10 +81,19 @@ export default function AudioBottomSheet() {
   };
 
   const playRecordedVoice = async (audio) => {
-    await audio.playAsync();
-    setPauseRecord(true);
-    setSound(audio);
-  };
+  setPauseRecord(true);
+
+  audio.setOnPlaybackStatusUpdate((status) => {
+    if (status.didJustFinish) {
+      // Audio playback has finished
+      setPauseRecord(false);
+      setSound(null); // Reset the sound object
+    }
+  });
+
+  await audio.playAsync();
+  setSound(audio);  
+};
 
   const pauseRecordedVoice = async () => {
     if (sound) {

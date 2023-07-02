@@ -1,8 +1,7 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Pressable } from "react-native";
 import AudioBottomSheet from "../components/Audio/AudioBottomSheet";
 import TextPage from "../components/Text/TextPage";
 import Profile from "../components/Profile/Profile";
-import AudioTimer from "../components/Audio/AudioTimer";
 import Modal from "react-native-modal";
 
 const ModalView = ({ modalVisible, closeModal, whichFeature }) => {
@@ -18,20 +17,23 @@ const ModalView = ({ modalVisible, closeModal, whichFeature }) => {
       visible={modalVisible}
       onRequestClose={() => closeModal()}
     >
+      <Pressable style={styles.bgContainer} onPress={() => closeModal()}/>
       <View style={styles.modalContainer}>
-        {whichFeature === "TEXT_PAGE" ? <TextPage/> : whichFeature ==="AUDIO_PAGE" ? <AudioBottomSheet /> : <Profile/>}
+        {whichFeature === "TEXT_PAGE" ? (
+          <TextPage />
+        ) : whichFeature === "AUDIO_PAGE" ? (
+          <AudioBottomSheet />
+        ) : (
+          <Profile />
+        )}
       </View>
     </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  modalStyle: {
-    flex: 1,
-    margin: 0,
-  },
   bgContainer: {
-    flex: 0.7,
+    flex: 1,
   },
   modalContainer: {
     flex: 0.4,

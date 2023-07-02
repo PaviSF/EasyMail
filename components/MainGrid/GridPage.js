@@ -1,5 +1,5 @@
 import React from "react";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import GridBox from "./GridBox";
