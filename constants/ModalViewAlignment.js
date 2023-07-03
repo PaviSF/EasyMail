@@ -1,12 +1,12 @@
 import { View, StyleSheet } from "react-native";
 import AudioTimer from "../components/Audio/AudioTimer";
 
-const ModalViewAlignment = ({ children, recordState }) => {
+const ModalViewAlignment = ({ children, recordState, sound }) => {
   return (
     <>
       <View style={styles.top} />
       <View style={styles.bottom}>
-        <AudioTimer recordState={recordState}></AudioTimer>
+        <AudioTimer recordState={recordState} sound={sound}></AudioTimer>
         <View>{children}</View>
       </View>
     </>

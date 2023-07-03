@@ -12,6 +12,7 @@ import Profile from "./components/Profile/Profile";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setMail } from "./features/user";
+import { View } from "react-native";
 
 const Stack = createNativeStackNavigator();
 const AppName = "EASY MAIL";
@@ -58,52 +59,54 @@ export default function Root() {
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="AudioDesign">
-        {userState ? (
+    <View style={{ flex: 1 }}>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="AudioDesign">
+          {userState ? (
+            <Stack.Screen
+              name="GridPage"
+              component={GridPage}
+              options={() => ({
+                title: AppName,
+                headerTintColor: "white",
+                headerStyle: { backgroundColor: "#4284f5", color: "white" },
+                headerRight: () => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      openModal(false);
+                    }}
+                  >
+                    <Ionicons name="person-circle" size={35} color="white" />
+                  </TouchableOpacity>
+                ),
+              })}
+            />
+          ) : (
+            <Stack.Screen
+              name="StoreEmail"
+              component={StoreEmail}
+              options={{ headerShown: false }}
+            />
+          )}
+
           <Stack.Screen
-            name="GridPage"
-            component={GridPage}
-            options={() => ({
-              title: AppName,
-              headerTintColor: "white",
-              headerStyle: { backgroundColor: "#4284f5", color: "white" },
-              headerRight: () => (
-                <TouchableOpacity
-                  onPress={() => {
-                    openModal(false);
-                  }}
-                >
-                  <Ionicons name="person-circle" size={35} color="white" />
-                </TouchableOpacity>
-              ),
-            })}
-          />
-        ) : (
-          <Stack.Screen
-            name="StoreEmail"
-            component={StoreEmail}
+            name="SendPicture"
+            component={SendPicture}
             options={{ headerShown: false }}
           />
-        )}
 
-        <Stack.Screen
-          name="SendPicture"
-          component={SendPicture}
-          options={{ headerShown: false }}
+          <Stack.Screen
+            name="Profile"
+            component={Profile}
+            options={headerOptions}
+          />
+        </Stack.Navigator>
+        <ModalView
+          modalVisible={modalVisible}
+          closeModal={closeModal}
+          whichFeature={whichFeature}
         />
-
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={headerOptions}
-        />
-      </Stack.Navigator>
-      <ModalView
-        modalVisible={modalVisible}
-        closeModal={closeModal}
-        whichFeature={whichFeature}
-      />
-    </NavigationContainer>
+      </NavigationContainer>
+    </View>
   );
 }

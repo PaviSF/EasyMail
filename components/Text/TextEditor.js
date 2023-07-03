@@ -35,11 +35,11 @@ const TextEditor = ({ onTextChange }) => {
             onChange={(des) => handleChange(des)}
             placeholder="Write your content here..."
             androidHardwareAccelerationDisabled={true}
-            // style={styles.richTextEditorStyle}
             initialHeight={200}
             onContentSizeChange={false}
             style={{height:200 }}
           />
+          
         </KeyboardAvoidingView>
       </ScrollView>
       <FineLine />

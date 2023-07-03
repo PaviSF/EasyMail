@@ -15,7 +15,7 @@ export default function AudioBottomSheet() {
   const [recording, setRecording] = useState();
   const [sound, setSound] = useState();
   const [recordState, setRecordState] = useState("NOT_STARTED");
-  const [pauseRecord, setPauseRecord] = useState(false);
+  const [pauseRecord, setPauseRecord] = useState("PAUSE");
 
   const user = useSelector((state) => state.user.value);
 
@@ -44,7 +44,7 @@ export default function AudioBottomSheet() {
   };
 
   const stopRecording = async () => {
-    setPauseRecord(false);
+    setPauseRecord("PAUSE");
     setRecordState("STOPPED");
     await recording.stopAndUnloadAsync();
     await Audio.setAudioModeAsync({
@@ -70,37 +70,35 @@ export default function AudioBottomSheet() {
         await sound.loadAsync({ uri: recording.getURI() });
         console.log("Loading Sound");
         playRecordedVoice(sound);
-        console.log(sound);
       } catch (error) {
         console.error("Failed to load sound", error);
       }
     } else {
       playRecordedVoice(sound);
-      console.log(sound);
     }
   };
 
   const playRecordedVoice = async (audio) => {
-  setPauseRecord(true);
+    setPauseRecord("PLAY");
 
-  audio.setOnPlaybackStatusUpdate((status) => {
-    if (status.didJustFinish) {
-      // Audio playback has finished
-      setPauseRecord(false);
-      setSound(null); // Reset the sound object
-    }
-  });
+    audio.setOnPlaybackStatusUpdate((status) => {
+      if (status.didJustFinish) {
+        // Audio playback has finished
+        setPauseRecord("PAUSE");
+        setSound(null); // Reset the sound object
+      }
+    });
 
-  await audio.playAsync();
-  setSound(audio);  
-};
+    await audio.playAsync();
+    setSound(audio);
+  };
 
   const pauseRecordedVoice = async () => {
     if (sound) {
       try {
         await sound.pauseAsync();
         setSound(sound);
-        setPauseRecord(false);
+        setPauseRecord("PAUSE");
       } catch (error) {
         console.error("Failed to pause recording", error);
       }
@@ -143,7 +141,7 @@ export default function AudioBottomSheet() {
     );
   } else if (recordState === "STOPPED") {
     return (
-      <ModalViewAlignment>
+      <ModalViewAlignment recordState={pauseRecord} sound={sound}>
         <View style={{ flexDirection: "row" }}>
           <TouchableOpacity
             style={styles.button}
@@ -157,7 +155,7 @@ export default function AudioBottomSheet() {
               color={buttonColor}
             />
           </TouchableOpacity>
-          {pauseRecord ? (
+          {pauseRecord === "PLAY" ? (
             <TouchableOpacity
               style={styles.button}
               onPress={() => pauseRecordedVoice()}
@@ -168,14 +166,14 @@ export default function AudioBottomSheet() {
                 color={buttonColor}
               />
             </TouchableOpacity>
-          ) : (
+          ) : (pauseRecord === "PAUSE" ? (
             <TouchableOpacity
               style={[styles.button, styles.centerButton]}
               onPress={() => loadAndPlayRecordedVoice()}
             >
               <AntDesign name="play" size={buttonSize} color={buttonColor} />
             </TouchableOpacity>
-          )}
+          ) : null)}
           <TouchableOpacity style={styles.button} onPress={() => sendRecord()}>
             <Feather name="send" size={buttonSize - 35} color={buttonColor} />
           </TouchableOpacity>

@@ -12,7 +12,7 @@ getMinAndSeconds = (time) => {
   return text;
 };
 
-const AudioTimer = ({ recordState }) => {
+const AudioTimer = ({ recordState, sound }) => {
   const [time, setTime] = useState(0);
   const [active, setActive] = useState(false);
 
@@ -26,6 +26,16 @@ const AudioTimer = ({ recordState }) => {
       clearInterval(timer);
     } else if (recordState === "NOT_STARTED") {
       setTime(0);
+    } else if (recordState=== "PLAY") {
+      if(!sound) {
+        setTime(0)
+        console.log(sound)
+      }
+      timer = setInterval(() => {
+        setTime((time) => time + 1);
+      }, 1000);
+    } else if (recordState === "PAUSE"){
+      clearInterval(timer);
     }
 
     return () => clearInterval(timer);
