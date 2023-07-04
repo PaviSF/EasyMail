@@ -9,18 +9,43 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import { setMail } from "../../features/user";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
 import CardView from "./CardView";
 
 const StoreEmail = () => {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
+
+  const getData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem("my-key");
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (e) {
+      // error reading value
+      //console.log(e);
+    }
+  };
+
   const [email, setEmail] = useState({
-    primaryEmail: "",
-    secondaryEmail: "",
-    isPrimary: true,
-    isSet: false,
+    primaryEmail: user.primaryEmail,
+    secondaryEmail: user.secondaryEmail,
+    isPrimary: user.isPrimary,
+    isSet: user.isSet,
   });
+  const [readyToLogin, setReadyToLogin] = useState(false);
+
+  useEffect(() => {
+    async function prepare() {
+      handleIsSet();
+      //console.log(email);
+      dispatch(setMail(email));
+      await storeData(email);
+      const data = await getData();
+      console.log(data,"ac`");
+    }
+    prepare();
+  }, [readyToLogin]);
 
   function isEmailValid(text) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -45,18 +70,10 @@ const StoreEmail = () => {
   const storeData = async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
+      //console.log(jsonValue);
       await AsyncStorage.setItem("my-key", jsonValue);
     } catch (e) {
       // saving error
-    }
-  };
-
-  const getData = async () => {
-    try {
-      const jsonValue = await AsyncStorage.getItem("my-key");
-      return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-      // error reading value
     }
   };
 
@@ -91,14 +108,19 @@ const StoreEmail = () => {
           />
         </View>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
             if (
               isEmailValid(email.primaryEmail) &&
               isEmailValid(email.secondaryEmail)
             ) {
-              handleIsSet();
-              dispatch(setMail(email));
-              storeData(email);
+              try {
+                handleIsSet();
+                // dispatch(setMail(email));
+                // await storeData(email);
+                setReadyToLogin(true);
+              } catch (e) {
+                console.log(e);
+              }
             }
           }}
         >

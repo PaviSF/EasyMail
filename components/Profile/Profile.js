@@ -67,82 +67,84 @@ const Profile = () => {
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: "center" }}>
       <CardView>
-        <View>
-          {edit ? (
-            <>
-              <View style={{ justifyContent: "center" }}>
-                <TextInput
-                  onChangeText={handlePrimaryEmailChange}
-                  style={[styles.emailText, styles.editableText]}
-                  placeholder={user.primaryEmail}
-                />
+        <View style={styles.extraCardDetail}>
+          <View>
+            {edit ? (
+              <>
+                <View style={{ justifyContent: "center" }}>
+                  <TextInput
+                    onChangeText={handlePrimaryEmailChange}
+                    style={[styles.emailText, styles.editableText]}
+                    placeholder={user.primaryEmail}
+                  />
 
-                <TextInput
-                  onChangeText={handleSecondaryEmailChange}
-                  style={[styles.emailText, styles.editableText]}
-                  placeholder={user.secondaryEmail}
-                />
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  if (
-                    isEmailValid(email.primaryEmail) &&
-                    isEmailValid(email.secondaryEmail)
-                  ) {
-                    setEdit(false);
-                    storeData(email);
-                    dispatch(setMail(email));
-                  }
-                }}
-                style={styles.button}
-              >
-                <Feather name="save" size={24} color="black" />
-                <Text style={styles.buttonText}>Save</Text>
-              </TouchableOpacity>
-            </>
-          ) : (
-            <>
-              <View style={{ justifyContent: "center" }}>
-                <Text style={[styles.emailText, styles.uneditableText]}>
-                  {user.primaryEmail}
-                </Text>
-                <Text style={[styles.emailText, styles.uneditableText]}>
-                  {user.secondaryEmail}
-                </Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  setEdit(true);
-                }}
-                style={styles.button}
-              >
-                <Feather name="edit" size={24} color="black" />
-                <Text style={styles.buttonText}>Edit</Text>
-              </TouchableOpacity>
-            </>
-          )}
-        </View>
-        <View>
-          <TouchableOpacity
-            onPress={() => handleIsPrimary()}
-            style={[styles.radioButton, styles.topRadioButton]}
-          >
-            <MaterialCommunityIcons
-              name={email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
-              size={35}
-              color={email.isPrimary ? "black" : "black"}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleIsNotPrimary()}
-            style={[styles.radioButton, styles.bottomRadioButton]}
-          >
-            <MaterialCommunityIcons
-              name={!email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
-              size={35}
-              color={!email.isPrimary ? "black" : "black"}
-            />
-          </TouchableOpacity>
+                  <TextInput
+                    onChangeText={handleSecondaryEmailChange}
+                    style={[styles.emailText, styles.editableText]}
+                    placeholder={user.secondaryEmail}
+                  />
+                </View>
+                <TouchableOpacity
+                  onPress={async () => {
+                    if (
+                      isEmailValid(email.primaryEmail) &&
+                      isEmailValid(email.secondaryEmail)
+                    ) {
+                      setEdit(false);
+                      await storeData(email);
+                      dispatch(setMail(email));
+                    }
+                  }}
+                  style={styles.button}
+                >
+                  <Feather name="save" size={24} color="#4284f5" />
+                  <Text style={styles.buttonText}>Save</Text>
+                </TouchableOpacity>
+              </>
+            ) : (
+              <>
+                <View style={{ justifyContent: "center" }}>
+                  <Text style={[styles.emailText, styles.uneditableText]}>
+                    {user.primaryEmail}
+                  </Text>
+                  <Text style={[styles.emailText, styles.uneditableText]}>
+                    {user.secondaryEmail}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setEdit(true);
+                  }}
+                  style={styles.button}
+                >
+                  <Feather name="edit" size={24} color="#4284f5" />
+                  <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </View>
+          <View>
+            <TouchableOpacity
+              onPress={() => handleIsPrimary()}
+              style={[styles.radioButton, styles.topRadioButton]}
+            >
+              <MaterialCommunityIcons
+                name={email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
+                size={35}
+                color={email.isPrimary ? "#4284f5" : "#4284f5"}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => handleIsNotPrimary()}
+              style={[styles.radioButton, styles.bottomRadioButton]}
+            >
+              <MaterialCommunityIcons
+                name={!email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
+                size={35}
+                color={!email.isPrimary ? "#4284f5" : "#4284f5"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </CardView>
     </SafeAreaView>
@@ -157,10 +159,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
-  buttonText: { fontWeight: "500", paddingTop: 3 },
+  buttonText: { fontWeight: "500", paddingTop: 3, color: "#4284f5" },
   emailText: {
     borderWidth: 2,
     borderRadius: 10,
+    borderColor: "#4284f5",
   },
   uneditableText: { padding: 17, marginBottom: 20 },
   editableText: { padding: 15, marginBottom: 15 },
@@ -173,6 +176,7 @@ const styles = StyleSheet.create({
   bottomRadioButton: {
     marginTop: 41,
   },
+  extraCardDetail: { flexDirection: "row" },
 });
 
 export default Profile;

@@ -5,6 +5,9 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
+  ToastAndroid,
+  Platform,
+  AlertIOS,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -40,7 +43,7 @@ export default function SendPicture() {
   }, []);
 
   if (hasCameraPermission === undefined) {
-    return <Text>Requesting permissions...</Text>;
+    return <Text></Text>;
   } else if (!hasCameraPermission) {
     return (
       <Text>
@@ -63,14 +66,26 @@ export default function SendPicture() {
   if (photo) {
     let sharePic = async () => {
       sendMail(photo.uri);
-      //setPhoto(undefined);
     };
 
     let savePhoto = () => {
       MediaLibrary.saveToLibraryAsync(photo.uri).then(() => {
-        setPhoto(undefined);
+        notifyMessage("Photo saved");
       });
     };
+
+    let discardPhoto = () => {
+      setPhoto(undefined);
+      notifyMessage("Photo discarded");
+    };
+
+    function notifyMessage(msg) {
+      if (Platform.OS === "android") {
+        ToastAndroid.show(msg, ToastAndroid.SHORT);
+      } else {
+        AlertIOS.alert(msg);
+      }
+    }
 
     return (
       <SafeAreaView style={styles.container}>
@@ -101,7 +116,7 @@ export default function SendPicture() {
             </TouchableOpacity>
           </View>
           <View style={{ flex: 1 }}>
-            <TouchableOpacity onPress={() => setPhoto(undefined)}>
+            <TouchableOpacity onPress={() => discardPhoto()}>
               <AntDesign name="delete" size={50} color="white" />
             </TouchableOpacity>
           </View>

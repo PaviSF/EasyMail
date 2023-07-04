@@ -7,7 +7,6 @@ const CardView = ({ children }) => {
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: "row",
     backgroundColor: "#fff",
     borderRadius: 10,
     shadowColor: "#000",
