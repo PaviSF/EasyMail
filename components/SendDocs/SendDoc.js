@@ -3,6 +3,7 @@ import * as DocumentPicker from "expo-document-picker";
 import * as MailComposer from "expo-mail-composer";
 import { useSelector } from "react-redux";
 import { TouchableOpacity } from "react-native";
+import { notifyMessage } from "../../constants/NotificationUtils";
 
 const SendDoc = ({ image }) => {
   const user = useSelector((state) => state.user.value);
@@ -22,7 +23,8 @@ const SendDoc = ({ image }) => {
         sendMail(document.uri);
       }
     } catch (error) {
-      console.log("Error:", error);
+      const errorMessage = "Failed to send the mail" + error;
+      notifyMessage(errorMessage);
     }
   };
 

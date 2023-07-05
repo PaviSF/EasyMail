@@ -4,6 +4,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
+  BackHandler,
+  Alert,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -13,7 +15,7 @@ import { useState, useEffect } from "react";
 
 import CardView from "./CardView";
 
-const StoreEmail = () => {
+const StoreEmail = ({navigation}) => {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
@@ -38,14 +40,34 @@ const StoreEmail = () => {
   useEffect(() => {
     async function prepare() {
       handleIsSet();
-      //console.log(email);
-      dispatch(setMail(email));
-      await storeData(email);
-      const data = await getData();
-      console.log(data,"ac`");
     }
     prepare();
   }, [readyToLogin]);
+
+  useEffect(() => {
+    const backAction = () => {
+      // Check if the current route is GridPage
+      if (navigation.isFocused()) {
+        Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel",
+          },
+          { text: "YES", onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
 
   function isEmailValid(text) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -88,7 +110,7 @@ const StoreEmail = () => {
             color="#4385f5"
           />
           <TextInput
-            placeholder={user.primaryEmail}
+            placeholder={"Professional Email"}
             style={styles.emailInput}
             onChangeText={handlePrimaryEmailChange}
           />
@@ -102,7 +124,7 @@ const StoreEmail = () => {
           />
 
           <TextInput
-            placeholder={user.secondaryEmail}
+            placeholder={"Personal Email"}
             style={styles.emailInput}
             onChangeText={handleSecondaryEmailChange}
           />
@@ -115,8 +137,8 @@ const StoreEmail = () => {
             ) {
               try {
                 handleIsSet();
-                // dispatch(setMail(email));
-                // await storeData(email);
+                dispatch(setMail(email));
+                await storeData(email);
                 setReadyToLogin(true);
               } catch (e) {
                 console.log(e);

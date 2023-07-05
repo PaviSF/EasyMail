@@ -27,7 +27,6 @@ export default function TextPage() {
         isHtml: true,
       });
     }
-    console.log(user.isPrimary);
   };
 
   return (

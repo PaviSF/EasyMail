@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  ToastAndroid,
+  Platform,
+  AlertIOS,
+} from "react-native";
 import { Audio } from "expo-av";
 import * as MailComposer from "expo-mail-composer";
 import { useSelector } from "react-redux";
@@ -9,6 +16,7 @@ import {
   Foundation,
   FontAwesome,
 } from "@expo/vector-icons";
+import { notifyMessage } from "../../constants/NotificationUtils";
 import ModalViewAlignment from "../../constants/ModalViewAlignment";
 
 export default function AudioBottomSheet() {
@@ -24,23 +32,20 @@ export default function AudioBottomSheet() {
 
   const startRecording = async () => {
     try {
-      console.log("Requesting permissions..");
       await Audio.requestPermissionsAsync();
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       });
 
-      console.log("Starting recording..");
       const { recording } = await Audio.Recording.createAsync(
         Audio.RecordingOptionsPresets.HIGH_QUALITY
       );
       setRecording(recording);
       setRecordState("STARTED");
-      console.log("Recording started");
-    } catch (err) {
-      console.error("Failed to start recording", err);
-    }
+    } catch (error) {
+      const errorMessage = "Failed to record sound" + error;
+      notifyMessage(errorMessage);    }
   };
 
   const stopRecording = async () => {
@@ -51,7 +56,6 @@ export default function AudioBottomSheet() {
       allowsRecordingIOS: false,
     });
     setRecording(recording);
-    console.log("Recording stopped and stored at", recording.getURI());
   };
 
   const discard = async () => {
@@ -59,7 +63,6 @@ export default function AudioBottomSheet() {
       setRecording(undefined);
       setSound(undefined);
       setRecordState("NOT_STARTED");
-      console.log("Recording discarded");
     }
   };
 
@@ -68,10 +71,10 @@ export default function AudioBottomSheet() {
       const sound = new Audio.Sound();
       try {
         await sound.loadAsync({ uri: recording.getURI() });
-        console.log("Loading Sound");
         playRecordedVoice(sound);
       } catch (error) {
-        console.error("Failed to load sound", error);
+        const errorMessage = "Failed to load sound" + error;
+        notifyMessage(errorMessage);
       }
     } else {
       playRecordedVoice(sound);
@@ -100,7 +103,8 @@ export default function AudioBottomSheet() {
         setSound(sound);
         setPauseRecord("PAUSE");
       } catch (error) {
-        console.error("Failed to pause recording", error);
+        const errorMessage = "Failed to pause sound" + error;
+        notifyMessage(errorMessage);
       }
     }
   };
@@ -166,14 +170,14 @@ export default function AudioBottomSheet() {
                 color={buttonColor}
               />
             </TouchableOpacity>
-          ) : (pauseRecord === "PAUSE" ? (
+          ) : pauseRecord === "PAUSE" ? (
             <TouchableOpacity
               style={[styles.button, styles.centerButton]}
               onPress={() => loadAndPlayRecordedVoice()}
             >
               <AntDesign name="play" size={buttonSize} color={buttonColor} />
             </TouchableOpacity>
-          ) : null)}
+          ) : null}
           <TouchableOpacity style={styles.button} onPress={() => sendRecord()}>
             <Feather name="send" size={buttonSize - 35} color={buttonColor} />
           </TouchableOpacity>

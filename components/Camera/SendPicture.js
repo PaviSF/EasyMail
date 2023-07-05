@@ -5,9 +5,6 @@ import {
   SafeAreaView,
   Image,
   TouchableOpacity,
-  ToastAndroid,
-  Platform,
-  AlertIOS,
 } from "react-native";
 import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -17,6 +14,8 @@ import * as MailComposer from "expo-mail-composer";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { notifyMessage } from "../../constants/NotificationUtils";
+
 
 export default function SendPicture() {
   let cameraRef = useRef();
@@ -78,14 +77,6 @@ export default function SendPicture() {
       setPhoto(undefined);
       notifyMessage("Photo discarded");
     };
-
-    function notifyMessage(msg) {
-      if (Platform.OS === "android") {
-        ToastAndroid.show(msg, ToastAndroid.SHORT);
-      } else {
-        AlertIOS.alert(msg);
-      }
-    }
 
     return (
       <SafeAreaView style={styles.container}>

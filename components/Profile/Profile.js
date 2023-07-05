@@ -12,6 +12,7 @@ import { setMail } from "../../features/user";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { notifyMessage } from "../../constants/NotificationUtils";
 import CardView from "../UserData/CardView";
 
 const Profile = () => {
@@ -36,7 +37,8 @@ const Profile = () => {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem("my-key", jsonValue);
     } catch (e) {
-      // saving error
+      const errorMessage = "Failed to store emails" + e;
+      notifyMessage(errorMessage);
     }
   };
 

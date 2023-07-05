@@ -5,13 +5,9 @@ import GridPage from "./components/MainGrid/GridPage";
 import SendPicture from "./components/Camera/SendPicture";
 import StoreEmail from "./components/UserData/StoreEmail";
 import ModalView from "./constants/ModalView";
-import { useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import Profile from "./components/Profile/Profile";
-import { useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setMail } from "./features/user";
 import { View } from "react-native";
 import Splash from "./components/Splash";
 
@@ -25,34 +21,11 @@ export default function Root() {
   const openModal = (text) => {
     setModalVisible(true);
     setWhichFeature(text);
-    console.log(whichFeature);
   };
 
   const closeModal = () => {
     setModalVisible(false);
   };
-
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const email = await getData();
-  //     if (email) {
-  //       dispatch(setMail(email));
-  //     }
-  //   }
-  //   fetchData();
-  // }, []);
-
-  // const getData = async () => {
-  //   try {
-  //     const jsonValue = await AsyncStorage.getItem("my-key");
-  //     console.log(jsonValue);
-  //     return jsonValue != null ? JSON.parse(jsonValue) : null;
-  //   } catch (e) {
-  //     // error reading value
-  //   }
-  // };
 
   const headerOptions = {
     title: AppName,
@@ -66,7 +39,7 @@ export default function Root() {
         <Stack.Navigator initialRouteName="EasyMail">
 
           <Stack.Screen
-            name="Splash"
+            name="Splash" 
             component={Splash}
             options={{ headerShown: false }}
           />
@@ -76,8 +49,10 @@ export default function Root() {
             component={GridPage}
             options={() => ({
               title: AppName,
+              headerShown: true,
               headerTintColor: "white",
               headerStyle: { backgroundColor: "#4284f5", color: "white" },
+              headerBackVisible: false, 
               headerRight: () => (
                 <TouchableOpacity
                   onPress={() => {

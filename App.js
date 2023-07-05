@@ -13,7 +13,7 @@ const store = configureStore({
 export default function App() {
   return (
     <Provider store={store}>
-      <Splash />
+      <Root/>
     </Provider>
   );
 }

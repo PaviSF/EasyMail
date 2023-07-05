@@ -1,6 +1,5 @@
-import React from "react";
-// import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet, TouchableOpacity, BackHandler, Alert } from "react-native";
 import { useState } from "react";
 import GridBox from "./GridBox";
 import SendDoc from "../SendDocs/SendDoc";
@@ -16,10 +15,34 @@ const GridPage = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [whichFeature, setWhichFeature] = useState();
 
+  useEffect(() => {
+    const backAction = () => {
+      // Check if the current route is GridPage
+      if (navigation.isFocused()) {
+        Alert.alert("Hold on!", "Are you sure you want to exit the app?", [
+          {
+            text: "Cancel",
+            onPress: () => null,
+            style: "cancel",
+          },
+          { text: "YES", onPress: () => BackHandler.exitApp() },
+        ]);
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
+
   const openModal = (text) => {
     setModalVisible(true);
     setWhichFeature(text);
-    console.log(whichFeature);
   };
 
   const closeModal = () => {
