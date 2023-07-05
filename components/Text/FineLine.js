@@ -8,7 +8,7 @@ const FineLine = () => {
 const styles = StyleSheet.create({
   line: {
     width:'95%',
-    height: 0.3,
+    height: 0.4,
     backgroundColor: "grey",
     marginBottom: 20, 
   },
