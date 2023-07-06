@@ -5,8 +5,14 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  MaterialCommunityIcons,
+  FontAwesome,
+  Ionicons,
+} from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 import { setMail } from "../../features/user";
 import { useState } from "react";
@@ -74,18 +80,69 @@ const Profile = () => {
             {edit ? (
               <>
                 <View style={{ justifyContent: "center" }}>
-                  <TextInput
-                    onChangeText={handlePrimaryEmailChange}
-                    style={[styles.emailText, styles.editableText]}
-                    placeholder={user.primaryEmail}
-                  />
+                  {/* Professional Email Editable Row */}
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={[styles.emailText]}>
+                      <FontAwesome
+                        name="suitcase"
+                        size={24}
+                        color="#4284f5"
+                        style={{ marginRight: 10, marginTop: 3 }}
+                      />
+                      <TextInput
+                        onChangeText={handlePrimaryEmailChange}
+                        value={email.primaryEmail}
+                        editable={true}
+                      />
+                    </View>
 
-                  <TextInput
-                    onChangeText={handleSecondaryEmailChange}
-                    style={[styles.emailText, styles.editableText]}
-                    placeholder={user.secondaryEmail}
-                  />
+                    <TouchableOpacity
+                      onPress={() => handleIsPrimary()}
+                      style={[styles.radioButton]}
+                    >
+                      <MaterialCommunityIcons
+                        name={
+                          email.isPrimary ? "radiobox-marked" : "radiobox-blank"
+                        }
+                        size={35}
+                        color={email.isPrimary ? "#4284f5" : "#4284f5"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+
+                  {/* Personal Email Editable Row */}
+                  <View style={{ flexDirection: "row" }}>
+                    <View style={[styles.emailText]}>
+                      <Ionicons
+                        name="person"
+                        size={24}
+                        color="#4284f5"
+                        style={{ marginRight: 9, marginTop: 2 }}
+                      />
+                      <TextInput
+                        onChangeText={handleSecondaryEmailChange}
+                        value={email.secondaryEmail}
+                      />
+                    </View>
+
+                    <TouchableOpacity
+                      onPress={() => handleIsNotPrimary()}
+                      style={[styles.radioButton]}
+                    >
+                      <MaterialCommunityIcons
+                        name={
+                          !email.isPrimary
+                            ? "radiobox-marked"
+                            : "radiobox-blank"
+                        }
+                        size={35}
+                        color={!email.isPrimary ? "#4284f5" : "#4284f5"}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
+
+                {/* Save Button */}
                 <TouchableOpacity
                   onPress={async () => {
                     if (
@@ -104,15 +161,66 @@ const Profile = () => {
                 </TouchableOpacity>
               </>
             ) : (
-              <>
-                <View style={{ justifyContent: "center" }}>
-                  <Text style={[styles.emailText, styles.uneditableText]}>
-                    {user.primaryEmail}
-                  </Text>
-                  <Text style={[styles.emailText, styles.uneditableText]}>
-                    {user.secondaryEmail}
-                  </Text>
+              <View style={{ justifyContent: "center" }}>
+                {/* Professional Email Row */}
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    style={[styles.emailText]}
+                    onPress={() => notifyMessage("Professional Email")}
+                  >
+                    <FontAwesome
+                      name="suitcase"
+                      size={24}
+                      color="#4284f5"
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text>{user.primaryEmail}</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => handleIsPrimary()}
+                    style={[styles.radioButton]}
+                  >
+                    <MaterialCommunityIcons
+                      name={
+                        email.isPrimary ? "radiobox-marked" : "radiobox-blank"
+                      }
+                      size={35}
+                      color={email.isPrimary ? "#4284f5" : "#4284f5"}
+                    />
+                  </TouchableOpacity>
                 </View>
+
+                {/* Personal Email Row */}
+                <View style={{ flexDirection: "row" }}>
+                  <TouchableOpacity
+                    style={[styles.emailText]}
+                    onPress={() => notifyMessage("Personal Email")}
+                  >
+                    <Ionicons
+                      name="person"
+                      size={24}
+                      color="#4284f5"
+                      style={{ marginRight: 8 }}
+                    />
+                    <Text>{user.secondaryEmail}</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => handleIsNotPrimary()}
+                    style={[styles.radioButton]}
+                  >
+                    <MaterialCommunityIcons
+                      name={
+                        !email.isPrimary ? "radiobox-marked" : "radiobox-blank"
+                      }
+                      size={35}
+                      color={!email.isPrimary ? "#4284f5" : "#4284f5"}
+                    />
+                  </TouchableOpacity>
+                </View>
+
+                {/* Edit Button */}
                 <TouchableOpacity
                   onPress={() => {
                     setEdit(true);
@@ -122,30 +230,8 @@ const Profile = () => {
                   <Feather name="edit" size={24} color="#4284f5" />
                   <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
-              </>
+              </View>
             )}
-          </View>
-          <View>
-            <TouchableOpacity
-              onPress={() => handleIsPrimary()}
-              style={[styles.radioButton, styles.topRadioButton]}
-            >
-              <MaterialCommunityIcons
-                name={email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
-                size={35}
-                color={email.isPrimary ? "#4284f5" : "#4284f5"}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => handleIsNotPrimary()}
-              style={[styles.radioButton, styles.bottomRadioButton]}
-            >
-              <MaterialCommunityIcons
-                name={!email.isPrimary ? "radiobox-marked" : "radiobox-blank"}
-                size={35}
-                color={!email.isPrimary ? "#4284f5" : "#4284f5"}
-              />
-            </TouchableOpacity>
           </View>
         </View>
       </CardView>
@@ -157,26 +243,26 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginHorizontal: 95,
+    marginHorizontal: 115,
     paddingVertical: 10,
     paddingHorizontal: 30,
   },
   buttonText: { fontWeight: "500", paddingTop: 3, color: "#4284f5" },
   emailText: {
+    flexDirection: "row",
     borderWidth: 2,
     borderRadius: 10,
     borderColor: "#4284f5",
+    paddingRight: 40,
+    padding: 15,
+    marginBottom: 15,
+    flex: 1,
   },
   uneditableText: { padding: 17, marginBottom: 20 },
-  editableText: { padding: 15, marginBottom: 15 },
+  editableText: {},
   radioButton: {
+    marginTop: 10,
     marginLeft: 10,
-  },
-  topRadioButton: {
-    marginTop: 13,
-  },
-  bottomRadioButton: {
-    marginTop: 41,
   },
   extraCardDetail: { flexDirection: "row" },
 });
