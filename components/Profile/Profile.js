@@ -152,6 +152,8 @@ const Profile = () => {
                       setEdit(false);
                       await storeData(email);
                       dispatch(setMail(email));
+                    } else {
+                      notifyMessage("Both fields are necessary");
                     }
                   }}
                   style={styles.button}
@@ -225,10 +227,21 @@ const Profile = () => {
                   onPress={() => {
                     setEdit(true);
                   }}
-                  style={styles.button}
+                  style={{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: 10,
+                  }}
                 >
-                  <Feather name="edit" size={24} color="#4284f5" />
-                  <Text style={styles.buttonText}>Edit</Text>
+                  <View style={styles.button}>
+                    <Feather
+                      name="edit"
+                      size={24}
+                      color="#4284f5"
+                      style={{ marginRight: 5 }}
+                    />
+                    <Text style={styles.buttonText}>Edit</Text>
+                  </View>
                 </TouchableOpacity>
               </View>
             )}
@@ -242,10 +255,6 @@ const Profile = () => {
 const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginHorizontal: 115,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
   },
   buttonText: { fontWeight: "500", paddingTop: 3, color: "#4284f5" },
   emailText: {
@@ -256,10 +265,9 @@ const styles = StyleSheet.create({
     paddingRight: 40,
     padding: 15,
     marginBottom: 15,
-    flex: 1,
+    width: "87%",
   },
-  uneditableText: { padding: 17, marginBottom: 20 },
-  editableText: {},
+
   radioButton: {
     marginTop: 10,
     marginLeft: 10,

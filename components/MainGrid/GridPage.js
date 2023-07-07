@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet, TouchableOpacity, BackHandler, Alert } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  BackHandler,
+  Alert,
+} from "react-native";
 import { useState } from "react";
 import GridBox from "./GridBox";
 import SendDoc from "../SendDocs/SendDoc";
@@ -58,16 +64,18 @@ const GridPage = ({ navigation }) => {
         >
           <GridBox image={sendTextImage} label={"Text"}></GridBox>
         </TouchableOpacity>
+
         <View style={styles.plusColumn} />
+
         <View style={styles.row}>
           <SendDoc image={sendDocumentImage} />
         </View>
       </View>
 
       <View style={styles.plusRow} />
-      <View style={styles.row}>
+      <View style={[styles.row]}>
         <TouchableOpacity
-          style={styles.row}
+          style={[styles.row]}
           onPress={() => navigation.navigate("SendPicture")}
         >
           <GridBox image={sendPhotoImage} label={"Camera"}></GridBox>
@@ -86,7 +94,7 @@ const GridPage = ({ navigation }) => {
         closeModal={closeModal}
         whichFeature={whichFeature}
       />
-      <StatusBar style="inverted"></StatusBar>
+      <StatusBar style="inverted" />
     </View>
   );
 };
@@ -100,8 +108,6 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
   },
   plusRow: {
     height: StyleSheet.hairlineWidth * 20,

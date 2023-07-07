@@ -29,7 +29,7 @@ const SendDoc = ({ image }) => {
   };
 
   return (
-    <TouchableOpacity onPress={pickDocument}>
+    <TouchableOpacity style={{flex:1}} onPress={pickDocument}>
       <GridBox image={image} label={"File Upload"}></GridBox>
     </TouchableOpacity>
   );

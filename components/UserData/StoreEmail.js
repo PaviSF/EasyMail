@@ -14,8 +14,9 @@ import { setMail } from "../../features/user";
 import { useState, useEffect } from "react";
 
 import CardView from "./CardView";
+import { notifyMessage } from "../../constants/NotificationUtils";
 
-const StoreEmail = ({navigation}) => {
+const StoreEmail = ({ navigation }) => {
   const user = useSelector((state) => state.user.value);
   const dispatch = useDispatch();
 
@@ -110,6 +111,7 @@ const StoreEmail = ({navigation}) => {
             color="#4385f5"
           />
           <TextInput
+            inputMode="email"
             placeholder={"Professional Email"}
             style={styles.emailInput}
             onChangeText={handlePrimaryEmailChange}
@@ -124,6 +126,7 @@ const StoreEmail = ({navigation}) => {
           />
 
           <TextInput
+            inputMode="text"
             placeholder={"Personal Email"}
             style={styles.emailInput}
             onChangeText={handleSecondaryEmailChange}
@@ -132,17 +135,28 @@ const StoreEmail = ({navigation}) => {
         <TouchableOpacity
           onPress={async () => {
             if (
+              email.primaryEmail.length === 0 ||
+              email.secondaryEmail.length === 0
+            ) {
+              notifyMessage("Both fields are mandatory");
+            } else if (
               isEmailValid(email.primaryEmail) &&
               isEmailValid(email.secondaryEmail)
             ) {
-              try {
-                handleIsSet();
-                dispatch(setMail(email));
-                await storeData(email);
-                setReadyToLogin(true);
-              } catch (e) {
-                console.log(e);
+              if (!(email.primaryEmail === email.secondaryEmail)) {
+                try {
+                  handleIsSet();
+                  dispatch(setMail(email));
+                  await storeData(email);
+                  setReadyToLogin(true);
+                } catch (e) {
+                  console.log(e);
+                }
+              } else {
+                notifyMessage("Both emails cannot be the same");
               }
+            } else {
+              notifyMessage("Invalid email format");
             }
           }}
         >

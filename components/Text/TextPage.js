@@ -21,8 +21,10 @@ export default function TextPage() {
 
   const sendMail = (body) => {
     if (body) {
+      const formattedBody = `<html><body>${body}</body></html>`;
+
       MailComposer.composeAsync({
-        body,
+        body: formattedBody,
         recipients: [user.isPrimary ? user.primaryEmail : user.secondaryEmail],
         isHtml: true,
       });

@@ -17,12 +17,12 @@ const styles = StyleSheet.create({
     flex:1,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical:155
+    flexGrow:1
   },
   image: {
     width: 50,
     height: 50,
-    resizeMode: "cover",
+    resizeMode: "contain",
     marginBottom: 10,
     tintColor: "#4284f5",
   },

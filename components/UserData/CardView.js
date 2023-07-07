@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
     padding: 16,
-    paddingVertical: 50,
+    paddingVertical: 30,
     margin: 16,
   },
 });
